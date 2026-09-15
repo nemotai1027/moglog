@@ -12,16 +12,24 @@
     <h1>
       募集中！
     </h1>
-    <p id="result">未入力です</p>
+    <div id="result">
+      <p>未入力です</p>
+    </div>
 
     <script>
       const params = new URLSearchParams(window.location.search);
-      const message = params.get('message');
+      const name = params.get('name') || '未入力';
+      const time = params.get('time') || '未入力';
+      const shop = params.get('shop') || '未入力';
+      const message = params.get('message') || '未入力';
       const result = document.getElementById('result');
 
-      if (message) {
-        result.textContent = message;
-      }
+      result.innerHTML = `
+        ${name}<br>
+        ${time}<br>
+        ${shop}<br>
+        ${message}
+      `;
     </script>
   </body>
 </html>
