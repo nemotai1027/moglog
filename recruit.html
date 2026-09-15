@@ -12,5 +12,16 @@
     <h1>
       募集中！
     </h1>
+    <p id="result">未入力です</p>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const message = params.get('message');
+      const result = document.getElementById('result');
+
+      if (message) {
+        result.textContent = message;
+      }
+    </script>
   </body>
 </html>
