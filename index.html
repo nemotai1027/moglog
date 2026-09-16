@@ -175,14 +175,13 @@
         };
         article.appendChild(goButton);
 
-        const talkForm = document.createElement('form');
-        talkForm.action = 'talk_demo1.html';
-        talkForm.method = 'get';
         const talkButton = document.createElement('button');
-        talkButton.type = 'submit';
+        talkButton.type = 'button';
         talkButton.textContent = '話す';
-        talkForm.appendChild(talkButton);
-        article.appendChild(talkForm);
+        talkButton.onclick = function () {
+          talk(talkButton);
+        };
+        article.appendChild(talkButton);
 
         const closeButton = document.createElement('button');
         closeButton.type = 'button';
