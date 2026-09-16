@@ -167,21 +167,25 @@
         });
         article.appendChild(details);
 
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'button-container';
+
         const goButton = document.createElement('button');
         goButton.type = 'button';
         goButton.textContent = '行く';
         goButton.onclick = function () {
           go(goButton);
         };
-        article.appendChild(goButton);
+        buttonContainer.appendChild(goButton);
 
         const talkButton = document.createElement('button');
         talkButton.type = 'button';
+        talkButton.className = 'button-talk';
         talkButton.textContent = '話す';
         talkButton.onclick = function () {
           talk(talkButton);
         };
-        article.appendChild(talkButton);
+        buttonContainer.appendChild(talkButton);
 
         const closeButton = document.createElement('button');
         closeButton.type = 'button';
@@ -189,11 +193,12 @@
         closeButton.onclick = function () {
           closeRecruitment(closeButton);
         };
-        article.appendChild(closeButton);
+        buttonContainer.appendChild(closeButton);
 
         const status = document.createElement('p');
         status.className = 'status';
-        article.appendChild(status);
+        buttonContainer.appendChild(status);
+        article.appendChild(buttonContainer);
 
         return article;
       }
