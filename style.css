@@ -21,6 +21,14 @@
     padding: 20px;
 }
 
+.recruitment.joined{
+    background-color: #fff59db0;
+}
+
+.recruitment.closed{
+    background-color: #d3d3d3;
+}
+
 .button-talk{
     background-color: #b8ffba;
     padding: 10px 20px;
