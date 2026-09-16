@@ -1,7 +1,8 @@
 .header{
-  background-color: #f0f0f0;
-  padding: 10px;
-  text-align: center;}
+  background-color: #ec9304a4;
+  height: 80px;
+  text-align: center;
+  padding: 20px;}
 
 .button-container{
     display: flex;
@@ -24,14 +25,14 @@
     background-color: #b8ffba;
     padding: 10px 20px;
     border-radius: 8px;
-    border: 1px solid #215d24;
+    border: 2px solid #215d24;
 }
 
 .button-close{
     background-color: #ffb8b8;
     padding: 10px 20px;
     border-radius: 8px;
-    border: 1px solid #5d2121;
+    border: 2px solid #9c0707;
 }
 
 .button-go{
