@@ -1,33 +1,54 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 
   <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css"></link>
     <title>
       もぐろぐ
     </title>
   </head>
 
   <body>
-    <h1>
+    <div class="header">
+      <h1>
       もぐろぐ
-    </h1>
-    <form id="recruitment-form">
-      <div>
-        <label for="name">名前:</label><br>
+      </h1>
+    </div>
+
+    <!-- <form action="recruit.html" method="get"> -->
+
+      <div class="boshu">
+        <br>
+       <h2>募集する</h2>
+
+        <label for="name">名前:</label>
         <input type="text" id="name" name="name" placeholder="例: さくら">
-      </div>
-      <div>
-        <label for="time">日時:</label><br>
+        <br>
+
+        <label for="time">日時:</label>
         <input type="text" id="time" name="time" placeholder="例: 10/1 18:00〜20:00">
-      </div>
-      <div>
-        <label for="shop">お店:</label><br>
+        <br>
+
+        <label for="shop">お店:</label>
         <input type="text" id="shop" name="shop" placeholder="例: 〇〇カフェ">
-      </div>
-      <div>
+        <br>
+        
         <label for="message">メッセージ:</label><br>
         <textarea id="message" name="message" rows="5" cols="40" placeholder="募集内容を入力してください"></textarea>
+        
+          
+        <div class="button-container">
+          <button type="submit">
+            募集する
+          </button>
+          <button type="reset">
+            キャンセル
+          </button>
+        </div>
+
+        <hr>
+
       </div>
       <br>
       <button type="submit">
@@ -44,7 +65,9 @@
     <hr>
     <br>
     <section id="recruitments">
+    <div>
     <article class="recruitment">
+   
       <p>ここ</p>
       <ul>
         <li>20時</li>
@@ -66,6 +89,7 @@
         <li>天久保ココス</li>
         <li>ハンバーグ食べたい</li>
       </ul>
+     
       <button type="button" onclick="go(this)">行く</button>
       <button type="button" onclick="talk(this)">話す</button>
       <button type="button" onclick="closeRecruitment(this)">締切</button>
@@ -111,6 +135,9 @@
       <p class="status"></p>
     </article>
     </section>
+    </div>
+  
+    
 
     <script>
       const storageKey = 'moglog_recruitments';
