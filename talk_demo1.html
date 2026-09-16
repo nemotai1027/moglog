@@ -9,6 +9,9 @@
   </head>
 
   <body>
+    <h1>
+      募集詳細
+    </h1>
     <p>
       ここ
       <ul>
@@ -23,9 +26,20 @@
         </li>
       </ul>
     </p>
-    <br>
+    <button type="button" onclick="go(this)">行く</button>
+    <button type="button" onclick="talk(this)">募集一覧に戻る</button>
     <hr>
-    <br>
+    <form action="talk_demo1.html" method="get">
+      <p>コメントを書き込み</p>
+      <div>
+        <label for="name">名前:</label><br>
+        <input type="text" id="comment_name" name="comment_name">
+      </div>
+        <label for="message">メッセージ:</label><br>
+        <textarea id="comment_message" name="comment_message" rows="5" cols="40" placeholder="コメントを入力してください"></textarea>
+      </div>
+    </form>
+    <hr>
     <p>1.根本<br>
       春日のデニーズ？
     </p>
