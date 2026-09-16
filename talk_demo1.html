@@ -26,8 +26,11 @@
         </li>
       </ul>
     </p>
-    <button type="button" onclick="go(this)">行く</button>
-    <button type="button" onclick="talk(this)">募集一覧に戻る</button>
+    <form action="index.html" method="get">
+    <button type="button" onclick="go()">行く</button>
+    <button type="submit">募集一覧に戻る</button>
+    </form>
+    <p id="action-message"></p>
     <hr>
     <form action="talk_demo1.html" method="get">
       <p>コメントを書き込み</p>
@@ -37,7 +40,9 @@
       </div>
         <label for="message">メッセージ:</label><br>
         <textarea id="comment_message" name="comment_message" rows="5" cols="40" placeholder="コメントを入力してください"></textarea>
+        <button type="submit">送信</button>
       </div>
+
     </form>
     <hr>
     <p>1.根本<br>
@@ -46,5 +51,26 @@
     <p>2.ここ<br>
       そうだよー
     </p>
+    <div id="comments"></div>
+    <script>
+      let first_comment = 0;
+
+      function go() {
+        document.getElementById('action-message').textContent = '行くことにしました';
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get('comment_name') || '未入力';
+      const message = params.get('comment_message') || '未入力';
+      if (params.has('comment_name') || params.has('comment_message') && first_comment === 0) {
+        const nextCommentNumber = Number(localStorage.getItem('talk_demo1_next_comment_number') || 3);
+        const comment = document.createElement('p');
+        comment.textContent = `3. ${name}\n${message}`;
+        comment.style.whiteSpace = 'pre-line';
+        document.getElementById('comments').appendChild(comment);
+        localStorage.setItem('talk_demo1_next_comment_number', nextCommentNumber + 1);
+        first_comment = 1;
+      }
+    </script>
   </body>
 </html>
