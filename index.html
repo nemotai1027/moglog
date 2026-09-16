@@ -16,7 +16,7 @@
       </h1>
     </div>
 
-    <!-- <form action="recruit.html" method="get"> -->
+    <form id="recruitment-form">
 
       <div class="boshu">
         <br>
@@ -38,14 +38,7 @@
         <textarea id="message" name="message" rows="5" cols="40" placeholder="募集内容を入力してください"></textarea>
         
           
-        <div class="button-container">
-          <button type="submit">
-            募集する
-          </button>
-          <button type="reset">
-            キャンセル
-          </button>
-        </div>
+
 
         <hr>
 
@@ -244,7 +237,7 @@
       }
 
       function talk(button) {
-        window.location.href = 'talk_demo1.html';
+        updateStatus(button, '話します');
       }
 
       function closeRecruitment(button) {
