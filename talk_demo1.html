@@ -26,8 +26,10 @@
         </li>
       </ul>
     </p>
+    <form action="intex.html" method="get">
     <button type="button" onclick="go(this)">行く</button>
     <button type="button" onclick="talk(this)">募集一覧に戻る</button>
+    </form>
     <hr>
     <form action="talk_demo1.html" method="get">
       <p>コメントを書き込み</p>
@@ -37,7 +39,9 @@
       </div>
         <label for="message">メッセージ:</label><br>
         <textarea id="comment_message" name="comment_message" rows="5" cols="40" placeholder="コメントを入力してください"></textarea>
+        <button type="submit">送信</button>
       </div>
+
     </form>
     <hr>
     <p>1.根本<br>
@@ -46,5 +50,19 @@
     <p>2.ここ<br>
       そうだよー
     </p>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      <p>3.</p>
+      const name = params.get('comment_name') || '未入力';
+      const message = params.get('comment_message') || '未入力';
+      const result = document.getElementById('result');
+
+      result.innerHTML = `
+        ${name}<br>
+        ${time}<br>
+        ${shop}<br>
+        ${message}
+      `;
+    </script>
   </body>
 </html>
