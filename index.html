@@ -239,6 +239,9 @@
       }
 
       function go(button) {
+        const recruitment = button.closest('.recruitment');
+        recruitment.classList.remove('closed');
+        recruitment.classList.add('joined');
         updateStatus(button, '行くことにしました');
       }
 
@@ -247,8 +250,11 @@
       }
 
       function closeRecruitment(button) {
+        const recruitment = button.closest('.recruitment');
+        recruitment.classList.remove('joined');
+        recruitment.classList.add('closed');
         updateStatus(button, '締め切りました');
-        button.closest('.recruitment').querySelectorAll('button').forEach(function (recruitmentButton) {
+        recruitment.querySelectorAll('button').forEach(function (recruitmentButton) {
           recruitmentButton.disabled = true;
         });
       }
