@@ -50,11 +50,24 @@
         <hr>
 
       </div>
-
-    <!-- </form> -->
-
+      <br>
+      <button type="submit">
+        募集する
+      </button>
+      <button type="reset">
+        キャンセル
+      </button>
+    </form>
+    <button type="button" onclick="clearRecruitments()">
+      募集データを削除
+    </button>
+    <br>
+    <hr>
+    <br>
+    <section id="recruitments">
     <div>
-      <article class="recruitment">
+    <article class="recruitment">
+   
       <p>ここ</p>
       <ul>
         <li>20時</li>
@@ -62,7 +75,9 @@
         <li>デニーズのパフェ食べましょー</li>
       </ul>
       <button type="button" onclick="go(this)">行く</button>
-      <button type="button" onclick="talk(this)">話す</button>
+      <form action="talk_demo1.html" method="get">
+      <button type="submit"> 話す </button>
+      </form>
       <button type="button" onclick="closeRecruitment(this)">締切</button>
       <p class="status"></p>
     </article>
@@ -119,11 +134,92 @@
       <button type="button" onclick="closeRecruitment(this)">締切</button>
       <p class="status"></p>
     </article>
+    </section>
     </div>
   
     
 
     <script>
+      const storageKey = 'moglog_recruitments';
+      const recruitmentForm = document.getElementById('recruitment-form');
+      const recruitmentList = document.getElementById('recruitments');
+
+      function createRecruitment(post) {
+        const article = document.createElement('article');
+        article.className = 'recruitment';
+
+        const name = document.createElement('p');
+        name.textContent = post.name;
+        article.appendChild(name);
+
+        const details = document.createElement('ul');
+        [post.time, post.shop, post.message].forEach(function (value) {
+          const item = document.createElement('li');
+          item.textContent = value;
+          details.appendChild(item);
+        });
+        article.appendChild(details);
+
+        const goButton = document.createElement('button');
+        goButton.type = 'button';
+        goButton.textContent = '行く';
+        goButton.onclick = function () {
+          go(goButton);
+        };
+        article.appendChild(goButton);
+
+        const talkForm = document.createElement('form');
+        talkForm.action = 'talk_demo1.html';
+        talkForm.method = 'get';
+        const talkButton = document.createElement('button');
+        talkButton.type = 'submit';
+        talkButton.textContent = '話す';
+        talkForm.appendChild(talkButton);
+        article.appendChild(talkForm);
+
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.textContent = '締切';
+        closeButton.onclick = function () {
+          closeRecruitment(closeButton);
+        };
+        article.appendChild(closeButton);
+
+        const status = document.createElement('p');
+        status.className = 'status';
+        article.appendChild(status);
+
+        return article;
+      }
+
+      function loadSavedRecruitments() {
+        const savedRecruitments = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        savedRecruitments.forEach(function (post) {
+          recruitmentList.prepend(createRecruitment(post));
+        });
+      }
+
+      recruitmentForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const post = {
+          name: document.getElementById('name').value.trim(),
+          time: document.getElementById('time').value.trim(),
+          shop: document.getElementById('shop').value.trim(),
+          message: document.getElementById('message').value.trim()
+        };
+
+        if (!post.name || !post.time || !post.shop || !post.message) {
+          return;
+        }
+
+        const savedRecruitments = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        savedRecruitments.push(post);
+        localStorage.setItem(storageKey, JSON.stringify(savedRecruitments));
+        recruitmentList.prepend(createRecruitment(post));
+        recruitmentForm.reset();
+      });
+
       function updateStatus(button, message) {
         const recruitment = button.closest('.recruitment');
         recruitment.querySelector('.status').textContent = message;
@@ -134,7 +230,7 @@
       }
 
       function talk(button) {
-        updateStatus(button, '話しかけました');
+        window.location.href = 'talk_demo1.html';
       }
 
       function closeRecruitment(button) {
@@ -143,6 +239,15 @@
           recruitmentButton.disabled = true;
         });
       }
+
+      function clearRecruitments() {
+        if (window.confirm('保存した募集データを削除しますか？')) {
+          localStorage.removeItem(storageKey);
+          window.location.reload();
+        }
+      }
+
+      loadSavedRecruitments();
     </script>
   </body>
 </html>
