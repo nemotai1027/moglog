@@ -172,6 +172,7 @@
 
         const goButton = document.createElement('button');
         goButton.type = 'button';
+        goButton.className = 'button-go';
         goButton.textContent = '行く';
         goButton.onclick = function () {
           go(goButton);
@@ -189,6 +190,7 @@
 
         const closeButton = document.createElement('button');
         closeButton.type = 'button';
+        closeButton.className = 'button-close';
         closeButton.textContent = '締切';
         closeButton.onclick = function () {
           closeRecruitment(closeButton);
