@@ -3,29 +3,21 @@
 
   <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css"></link>
     <title>
       talk_demo1
     </title>
   </head>
 
   <body>
-    <h1>
-      募集詳細
-    </h1>
-    <p>
-      ここ
-      <ul>
-        <li>
-          20時
-        </li>
-        <li>
-          デニーズ
-        </li>  
-        <li>
-          デニーズのパフェ食べましょー
-        </li>
-      </ul>
-    </p>
+    <div class="header">
+      <h1>
+        募集詳細
+      </h1>
+    </div>
+    <br>
+    <div id="recruitment-detail">
+    </div>
     <form action="index.html" method="get">
     <button type="button" onclick="go()">行く</button>
     <button type="submit">募集一覧に戻る</button>
@@ -54,23 +46,42 @@
     <div id="comments"></div>
     <script>
       let first_comment = 0;
+      
+      const params = new URLSearchParams(window.location.search);
+
+      const name = params.get('name');
+      const time = params.get('time');
+      const shop = params.get('shop');
+      const participants = params.get('participants');
+      const message = params.get('message');
+
+      document.getElementById('recruitment-detail').innerHTML =
+        '<p>' + name + '</p>' +
+        '<ul>' +
+        '<li>' + time + '</li>' +
+        '<li>' + shop + '</li>' +
+        '<li>' + participants + '</li>' +
+        '<li>' + message + '</li>' +
+        '</ul>';
 
       function go() {
         document.getElementById('action-message').textContent = '行くことにしました';
       }
 
-      const params = new URLSearchParams(window.location.search);
-      const name = params.get('comment_name') || '未入力';
-      const message = params.get('comment_message') || '未入力';
-      if (params.has('comment_name') || params.has('comment_message') && first_comment === 0) {
+      const commentName = params.get('comment_name') || '未入力';
+      const commentMessage = params.get('comment_message') || '未入力';
+
+      if (params.has('comment_name') || params.has('comment_message') && first_comment === 0) { 
         const nextCommentNumber = Number(localStorage.getItem('talk_demo1_next_comment_number') || 3);
         const comment = document.createElement('p');
-        comment.textContent = `3. ${name}\n${message}`;
+        comment.textContent = `3. ${commentName}\n${commentMessage}`;
         comment.style.whiteSpace = 'pre-line';
         document.getElementById('comments').appendChild(comment);
         localStorage.setItem('talk_demo1_next_comment_number', nextCommentNumber + 1);
         first_comment = 1;
       }
+
+
     </script>
   </body>
 </html>

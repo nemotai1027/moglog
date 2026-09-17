@@ -3,16 +3,20 @@
 
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css"></link>
-    <title>
-      もぐろぐ
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
+    <title>もぐろぐ
     </title>
   </head>
 
   <body>
     <div class="header">
-      <h1>
-      もぐろぐ
+      <h1 >
+      <span class="mog">もぐ</span>
+      <span class="log">ろぐ</span>
       </h1>
     </div>
 
@@ -38,10 +42,10 @@
       </div>
 
       <div class="button-container">
-        <button type="submit">
+        <button class="button-submit" type="submit">
           募集する
         </button>
-        <button type="reset">
+        <button class="button-reset" type="reset">
           キャンセル
         </button>
 
@@ -57,7 +61,7 @@
     <article class="recruitment">
    
       <p>ここ</p>
-      <ul class="recuruitment-info">
+      <ul class="recruitment-info">
         <li>20時</li>
         <li>デニーズ</li>
         <li>2人</li>
@@ -66,9 +70,7 @@
 
       <div class="button-container">
         <button type="button" onclick="go(this)" class="button-go">行く</button>
-        <form action="talk_demo1.html" method="get">
-          <button type="submit" class="button-talk"> 話す </button>
-        </form>
+        <button type="button" onclick="talk(this)" class="button-talk">話す</button>
         <button type="button" onclick="closeRecruitment(this)" class = "button-close">締切</button>
         <p class="status"></p>
       </div>
@@ -76,7 +78,7 @@
 
     <article class="recruitment">
       <p>あやか</p>
-      <ul class="recuruitment-info">
+      <ul class="recruitment-info">
         <li>21時</li>
         <li>天久保ココス</li>
         <li>4人</li>
@@ -93,7 +95,7 @@
 
     <article class="recruitment">
       <p>ケイト</p>
-      <ul class="recuruitment-info">
+      <ul class="recruitment-info">
         <li>19時</li>
         <li>春4ファミマ</li>
         <li>1人</li>
@@ -110,7 +112,7 @@
 
     <article class="recruitment">
       <p>さおりん</p>
-      <ul class="recuruitment-info">
+      <ul class="recruitment-info">
         <li>18時</li>
         <li>zeyo</li>
         <li>1人</li>
@@ -126,7 +128,7 @@
 
     <article class="recruitment">
       <p>ちゃが</p>
-      <ul class="recuruitment-info">
+      <ul class="recruitment-info">
         <li>20時</li>
         <li>あじさい</li>
         <li>3人</li>
@@ -167,7 +169,8 @@
         const details = document.createElement('ul');
         const participantsMax = Number(post.participants_max ?? post.guest ?? 0);
         const participants = Number(post.participants ?? 1);
-        [post.time, post.shop, post.message].forEach(function (value) {
+  
+        [post.time, post.shop,post.participants, post.message].forEach(function (value) {
           const item = document.createElement('li');
           item.textContent = value;
           details.appendChild(item);
@@ -378,8 +381,25 @@
       }
 
       function talk(button) {
-        updateStatus(button, '話します');
-      }
+       const recruitment = button.closest('.recruitment');
+
+       const name = recruitment.querySelector('p').textContent;
+       const items = recruitment.querySelectorAll('li');
+
+       const time = items[0].textContent;
+       const shop = items[1].textContent;
+       const participants = items[2].textContent;
+       const message = items[3].textContent;
+
+       const url = 'talk_demo1.html'
+        + '?name=' + encodeURIComponent(name)
+        + '&time=' + encodeURIComponent(time)
+        + '&shop=' + encodeURIComponent(shop)
+        + '&participants=' + encodeURIComponent(participants)
+        + '&message=' + encodeURIComponent(message);
+
+       window.location.href = url;
+    }
 
       function closeRecruitment(button) {
         const recruitment = button.closest('.recruitment');
