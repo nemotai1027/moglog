@@ -166,6 +166,7 @@
         article.appendChild(name);
 
         const details = document.createElement('ul');
+        details.className = 'recruitment-info';
         [post.time, post.shop,post.participants, post.message].forEach(function (value) {
           const item = document.createElement('li');
           item.textContent = value;
