@@ -45,7 +45,7 @@
 .boshu textarea{
     display: block;
     margin-top: 10px;
-    color: #ff0000;
+    color: #000;
 }
 
 
@@ -73,7 +73,7 @@
 }
 
 /* 募集内容 */
-.recuruitment-info{
+.recruitment-info{
     list-style-type: none;
     padding: 0;
 }
@@ -82,7 +82,7 @@
     margin-bottom: 5px;
 }
 
-.recruitment-info li:first-child(1)::before{
+.recruitment-info li:first-child::before{
     content: "⏰";
 }
 
