@@ -58,7 +58,8 @@
 }
 
 .boshu{
-    margin: 10px;
+    width: calc(100% - 30px);
+    margin:0 auto 15px;
 }
 
 .recruitment{
@@ -222,7 +223,8 @@
 
   /* 募集フォーム */
   .boshu {
-    width: 100%;
+    width: calc(100% - 30px);
+    margin:0 auto 15px;
     box-sizing: border-box;
   }
 
@@ -262,10 +264,10 @@
 
   /* 募集カード */
   .recruitment {
-    width: 100%;
+    width: calc(100% - 30px);
+    margin:10px auto;
     box-sizing: border-box;
     padding: 16px;
-    margin-bottom: 0 0 15px 0;
   }
 
   .recruitment > p {
