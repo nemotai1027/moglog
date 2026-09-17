@@ -29,6 +29,28 @@
     background-color: #d3d3d3;
 }
 
+.boshu label{
+    display: block;
+    margin-bottom: 5px;
+}
+
+.boshu input{
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.boshu textarea{
+    display: block;
+    margin-top: 10px;
+    color: #ff0000;
+}
+
+
+
+/* ボタン */
 .button-talk{
     background-color: #b8ffba;
     padding: 10px 20px;
