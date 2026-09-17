@@ -6,8 +6,28 @@
 
 .button-container{
     display: flex;
+    align-items: center;
+    flex-wrap: wrap;
     margin: 20px;
     gap: 10px;
+}
+
+.button-container > button,
+.button-container > form,
+.button-container > .status {
+    flex: 0 0 auto;
+}
+
+.button-container > form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.button-container .status {
+    min-width: 9em;
+    margin: 0;
+    line-height: 1.4;
+    white-space: nowrap;
 }
 
 .boshu{
@@ -51,23 +71,26 @@
 
 
 /* ボタン */
-.button-talk{
-    background-color: #b8ffba;
+.button-talk,
+.button-close,
+.button-go {
+    min-width: 110px;
     padding: 10px 20px;
     border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.button-talk{
+    background-color: #b8ffba;
     border: 2px solid #215d24;
 }
 
 .button-close{
     background-color: #ffb8b8;
-    padding: 10px 20px;
-    border-radius: 8px;
     border: 2px solid #9c0707;
 }
 
 .button-go{
     background-color: #05c2fbc0;
-    padding: 10px 20px;
-    border-radius: 8px;
     border: 2px solid #0682f7;
 }
