@@ -35,7 +35,7 @@
         <input type="text" id="shop" name="shop" placeholder="例: 〇〇カフェ">  
       
         <label for="participants">人数:</label>
-        <input type="text" id="participants" name="participants" placeholder="例: 2人">
+        <input type="number" id="participants" name="participants" min="1" step="1" placeholder="例: 2">
         
         <label for="message">メッセージ:</label>
         <textarea id="message" name="message" rows="5" cols="40" placeholder="募集内容を入力してください"></textarea>
@@ -160,6 +160,7 @@
       function createRecruitment(post) {
         const article = document.createElement('article');
         article.className = 'recruitment';
+        article.dataset.recruitmentId = post.id || '';
 
         const name = document.createElement('p');
         name.textContent = post.name;
@@ -167,12 +168,36 @@
 
         const details = document.createElement('ul');
         details.className = 'recruitment-info';
+        const participantsMax = Number(post.participants_max ?? post.guest ?? 0);
+        const participants = Number(post.participants ?? 1);
+  
         [post.time, post.shop,post.participants, post.message].forEach(function (value) {
           const item = document.createElement('li');
           item.textContent = value;
           details.appendChild(item);
         });
         article.appendChild(details);
+
+        const participantCount = document.createElement('p');
+        participantCount.className = 'participant-count';
+        participantCount.textContent = `参加人数: ${participants} / ${participantsMax}`;
+        article.appendChild(participantCount);
+
+        const participantNames = document.createElement('p');
+        participantNames.className = 'participant-names';
+        const names = Array.isArray(post.participantNames) ? post.participantNames : [];
+        participantNames.textContent = names.length > 0
+          ? `参加者: ${names.join('、')}`
+          : '参加者: まだいません';
+        article.appendChild(participantNames);
+
+        const participantName = document.createElement('input');
+        participantName.type = 'text';
+        participantName.className = 'participant-name';
+        participantName.placeholder = '参加する名前を入力してください';
+        const joinedName = post.id ? localStorage.getItem(`moglog_joined_${post.id}`) || '' : '';
+        participantName.value = joinedName === 'true' ? '' : joinedName;
+        article.appendChild(participantName);
 
         const buttonContainer = document.createElement('div');
         buttonContainer.className = 'button-container';
@@ -181,9 +206,17 @@
         goButton.type = 'button';
         goButton.className = 'button-go';
         goButton.textContent = '行く';
+        goButton.disabled = !participantName.value.trim();
+        participantName.addEventListener('input', function () {
+          goButton.disabled = !participantName.value.trim();
+        });
         goButton.onclick = function () {
-          go(goButton);
+          toggleParticipation(goButton, post.id, participantName);
         };
+        if (joinedName && joinedName !== 'true') {
+          article.classList.add('joined');
+          goButton.textContent = '行かない';
+        }
         buttonContainer.appendChild(goButton);
 
         const talkButton = document.createElement('button');
@@ -206,16 +239,33 @@
 
         const status = document.createElement('p');
         status.className = 'status';
-        buttonContainer.appendChild(status);
         article.appendChild(buttonContainer);
+        article.appendChild(status);
 
         return article;
+      }
+
+      function migrateGuestField(document) {
+        const data = document.data();
+        if (data.guest === undefined || data.participants_max !== undefined) {
+          return;
+        }
+
+        db.collection('recruitments').doc(document.id).update({
+          participants_max: Number(data.guest),
+          participants: Number(data.participants ?? 1),
+          guest: firebase.firestore.FieldValue.delete()
+        });
       }
 
       db.collection('recruitments').orderBy('createdAt', 'desc').onSnapshot(function (snapshot) {
         recruitmentList.replaceChildren();
         snapshot.forEach(function (document) {
-          recruitmentList.appendChild(createRecruitment(document.data()));
+          migrateGuestField(document);
+          recruitmentList.appendChild(createRecruitment({
+            id: document.id,
+            ...document.data()
+          }));
         });
       }, function (error) {
         console.error('募集一覧の取得に失敗しました:', error);
@@ -228,11 +278,12 @@
           name: document.getElementById('name').value.trim(),
           time: document.getElementById('time').value.trim(),
           shop: document.getElementById('shop').value.trim(),
-          participants: document.getElementById('participants').value.trim(),
-          message: document.getElementById('message').value.trim()
+          message: document.getElementById('message').value.trim(),
+          participants_max: Number(document.getElementById('participants').value.trim()),
+          participants: 1
         };
 
-        if (!post.name || !post.time || !post.shop || !post.participants || !post.message) {
+        if (!post.name || !post.time || !post.shop || !post.message || !Number.isInteger(post.participants_max) || post.participants_max < 1) {
           return;
         }
 
@@ -253,10 +304,81 @@
       }
 
       function go(button) {
-        const recruitment = button.closest('.recruitment');
-        recruitment.classList.remove('closed');
-        recruitment.classList.add('joined');
         updateStatus(button, '行くことにしました');
+      }
+
+      function toggleParticipation(button, recruitmentId, participantNameInput) {
+        if (!recruitmentId) {
+          go(button);
+          return;
+        }
+
+        const recruitment = button.closest('.recruitment');
+        const joinedKey = `moglog_joined_${recruitmentId}`;
+        const joinedName = localStorage.getItem(joinedKey) || '';
+        const isJoined = Boolean(joinedName);
+        const participantName = participantNameInput.value.trim();
+        const recruitmentRef = db.collection('recruitments').doc(recruitmentId);
+
+        if (!participantName) {
+          button.disabled = true;
+          updateStatus(button, '名前を入力してください');
+          return;
+        }
+
+        db.runTransaction(function (transaction) {
+          return transaction.get(recruitmentRef).then(function (document) {
+            const data = document.data() || {};
+            const participantsMax = Number(data.participants_max ?? data.guest ?? 0);
+            const participants = Number(data.participants ?? 1);
+            const participantNames = Array.isArray(data.participantNames)
+              ? data.participantNames
+              : [data.name].filter(Boolean);
+
+            if (!isJoined && participants >= participantsMax) {
+              throw new Error('FULL');
+            }
+
+            if (!isJoined && participantNames.includes(participantName)) {
+              throw new Error('DUPLICATE_NAME');
+            }
+
+            const nextParticipants = isJoined
+              ? Math.max(1, participants - 1)
+              : participants + 1;
+            const nextParticipantNames = isJoined
+              ? participantNames.filter(function (name) {
+                return name !== joinedName;
+              })
+              : participantNames.concat(participantName);
+            transaction.update(recruitmentRef, {
+              participants_max: participantsMax,
+              participants: nextParticipants,
+              participantNames: nextParticipantNames
+            });
+          });
+        }).then(function () {
+          const nextJoined = !isJoined;
+          if (nextJoined) {
+            localStorage.setItem(joinedKey, participantName);
+          } else {
+            localStorage.removeItem(joinedKey);
+          }
+          recruitment.classList.toggle('joined', nextJoined);
+          updateStatus(button, nextJoined ? '行くことにしました' : '行かないことにしました');
+          button.textContent = nextJoined ? '行かない' : '行く';
+        }).catch(function (error) {
+          if (error.message === 'FULL') {
+            updateStatus(button, '定員に達しています');
+            return;
+          }
+          if (error.message === 'DUPLICATE_NAME') {
+            updateStatus(button, 'その名前はすでに参加しています');
+            return;
+          }
+          console.error('参加人数の更新に失敗しました:', error);
+          updateStatus(button, '更新に失敗しました');
+        });
       }
 
       function talk(button) {
