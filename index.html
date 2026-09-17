@@ -56,90 +56,9 @@
     <hr>
     <br>
     <section id="recruitments">
-    <div id="firebase-recruitments"></div>
-    <div>
-    <article class="recruitment">
-   
-      <p>ここ</p>
-      <ul class="recruitment-info">
-        <li>20時</li>
-        <li>デニーズ</li>
-        <li>デニーズのパフェ食べましょー</li>
-      </ul>
-
-      <div class="button-container">
-        <button type="button" onclick="go(this)" class="button-go">行く</button>
-        <button type="button" onclick="talk(this)" class="button-talk">話す</button>
-        <button type="button" onclick="closeRecruitment(this)" class = "button-close">締切</button>
-        <p class="status"></p>
-      </div>
-    </article>
-
-    <article class="recruitment">
-      <p>あやか</p>
-      <ul class="recruitment-info">
-        <li>21時</li>
-        <li>天久保ココス</li>
-        <li>ハンバーグ食べたい</li>
-      </ul>
-     
-      <div class="button-container">
-        <button type="button" onclick="go(this)" class="button-go">行く</button>
-        <button type="button" onclick="talk(this)" class="button-talk">話す</button>
-        <button type="button" onclick="closeRecruitment(this)" class = "button-close">締切</button>
-        <p class="status"></p>
-      </div>
-    </article>
-
-    <article class="recruitment">
-      <p>ケイト</p>
-      <ul class="recruitment-info">
-        <li>19時</li>
-        <li>春4ファミマ</li>
-        <li>ひとりさみしい</li>
-      </ul>
-      
-      <div class="button-container">
-        <button type="button" onclick="go(this)" class="button-go">行く</button>
-      <button type="button" onclick="talk(this)" class="button-talk">話す</button>
-        <button type="button" onclick="closeRecruitment(this)" class = "button-close">締切</button>
-        <p class="status"></p>
-      </div>
-    </article>
-
-    <article class="recruitment">
-      <p>さおりん</p>
-      <ul class="recruitment-info">
-        <li>18時</li>
-        <li>zeyo</li>
-        <li>カレーうどん食べよ</li>
-      </ul>
-      <div class="button-container">
-        <button type="button" onclick="go(this)" class="button-go">行く</button>
-        <button type="button" onclick="talk(this)" class="button-talk">話す</button>
-        <button type="button" onclick="closeRecruitment(this)" class = "button-close">締切</button>
-        <p class="status"></p>
-      </div>
-    </article>
-
-    <article class="recruitment">
-      <p>ちゃが</p>
-      <ul class="recruitment-info">
-        <li>20時</li>
-        <li>あじさい</li>
-        <li>飲もう！</li>
-      </ul>
-
-      <div class="button-container">
-        <button type="button" onclick="go(this)" class="button-go">行く</button>
-        <button type="button" onclick="talk(this)" class="button-talk">話す</button>
-        <button type="button" onclick="closeRecruitment(this)" class = "button-close">締切</button>
-        <p class="status"></p>
-      </div>
-      
-    </article>
+    <div id="firebase-recruitments"></div>   
     </section>
-    </div>
+
   
     
 
@@ -238,6 +157,15 @@
         article.appendChild(buttonContainer);
         article.appendChild(status);
 
+        if (post.closed) {
+          article.classList.add('closed');
+          status.textContent = '締め切りました';
+          participantName.disabled = true;
+          article.querySelectorAll('button').forEach(function (button) {
+            button.disabled = true;
+          });
+        }
+
         return article;
       }
 
@@ -326,6 +254,11 @@
         db.runTransaction(function (transaction) {
           return transaction.get(recruitmentRef).then(function (document) {
             const data = document.data() || {};
+
+            if (data.closed) {
+              throw new Error('CLOSED');
+            }
+
             const participantsMax = Number(data.participants_max ?? data.guest ?? 0);
             const participants = Number(data.participants ?? 1);
             const participantNames = Array.isArray(data.participantNames)
@@ -369,6 +302,10 @@
             updateStatus(button, '定員に達しています');
             return;
           }
+          if (error.message === 'CLOSED') {
+            updateStatus(button, '締め切られています');
+            return;
+          }
           if (error.message === 'DUPLICATE_NAME') {
             updateStatus(button, 'その名前はすでに参加しています');
             return;
@@ -386,8 +323,8 @@
 
        const time = items[0].textContent;
        const shop = items[1].textContent;
-       const participants = items[2].textContent;
-       const message = items[3].textContent;
+      const participants = recruitment.querySelector('.participant-count').textContent;
+      const message = items[2].textContent;
 
        const url = 'talk_demo1.html'
         + '?name=' + encodeURIComponent(name)
@@ -401,9 +338,30 @@
 
       function closeRecruitment(button) {
         const recruitment = button.closest('.recruitment');
+
+        if (recruitment.dataset.recruitmentId) {
+          db.collection('recruitments').doc(recruitment.dataset.recruitmentId).update({
+            closed: true
+          }).then(function () {
+            applyClosedState(recruitment, button);
+          }).catch(function (error) {
+            console.error('締切状態の更新に失敗しました:', error);
+            updateStatus(button, '締切に失敗しました');
+          });
+          return;
+        }
+
+        applyClosedState(recruitment, button);
+      }
+
+      function applyClosedState(recruitment, button) {
         recruitment.classList.remove('joined');
         recruitment.classList.add('closed');
         updateStatus(button, '締め切りました');
+        const participantName = recruitment.querySelector('.participant-name');
+        if (participantName) {
+          participantName.disabled = true;
+        }
         recruitment.querySelectorAll('button').forEach(function (recruitmentButton) {
           recruitmentButton.disabled = true;
         });
