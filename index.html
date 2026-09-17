@@ -46,9 +46,6 @@
           キャンセル
         </button>
 
-        <button type="button" onclick="clearRecruitments()">
-          募集データを削除
-        </button>
       </div>
   </form>
 
@@ -56,6 +53,7 @@
     <hr>
     <br>
     <section id="recruitments">
+    <div id="firebase-recruitments"></div>
     <div>
     <article class="recruitment">
    
@@ -144,10 +142,14 @@
   
     
 
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <script>
-      const storageKey = 'moglog_recruitments';
+      firebase.initializeApp(window.firebaseConfig);
+      const db = firebase.firestore();
       const recruitmentForm = document.getElementById('recruitment-form');
-      const recruitmentList = document.getElementById('recruitments');
+      const recruitmentList = document.getElementById('firebase-recruitments');
 
       function createRecruitment(post) {
         const article = document.createElement('article');
@@ -203,12 +205,14 @@
         return article;
       }
 
-      function loadSavedRecruitments() {
-        const savedRecruitments = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        savedRecruitments.forEach(function (post) {
-          recruitmentList.prepend(createRecruitment(post));
+      db.collection('recruitments').orderBy('createdAt', 'desc').onSnapshot(function (snapshot) {
+        recruitmentList.replaceChildren();
+        snapshot.forEach(function (document) {
+          recruitmentList.appendChild(createRecruitment(document.data()));
         });
-      }
+      }, function (error) {
+        console.error('募集一覧の取得に失敗しました:', error);
+      });
 
       recruitmentForm.addEventListener('submit', function (event) {
         event.preventDefault();
@@ -224,11 +228,15 @@
           return;
         }
 
-        const savedRecruitments = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        savedRecruitments.push(post);
-        localStorage.setItem(storageKey, JSON.stringify(savedRecruitments));
-        recruitmentList.prepend(createRecruitment(post));
-        recruitmentForm.reset();
+        db.collection('recruitments').add({
+          ...post,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(function () {
+          recruitmentForm.reset();
+        }).catch(function (error) {
+          console.error('募集の投稿に失敗しました:', error);
+          window.alert('投稿に失敗しました。Firebaseの設定と接続を確認してください。');
+        });
       });
 
       function updateStatus(button, message) {
@@ -257,14 +265,6 @@
         });
       }
 
-      function clearRecruitments() {
-        if (window.confirm('保存した募集データを削除しますか？')) {
-          localStorage.removeItem(storageKey);
-          window.location.reload();
-        }
-      }
-
-      loadSavedRecruitments();
     </script>
   </body>
 </html>
