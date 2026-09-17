@@ -1,8 +1,31 @@
 .header{
-  background-color: #ec9304a4;
+  background-color: #fff;
+  border-radius: 15px;
   height: 80px;
   text-align: center;
   padding: 20px;}
+
+.header .mog{
+    font-size: 40px;
+    margin: 0;
+    color: #fd9e06;
+    font-family: "Kosugi Maru", sans-serif;
+    }
+
+.header .log{
+    font-size: 40px;
+    margin: 0;
+    color: #64c3e8;
+    font-family: "Kosugi Maru", sans-serif;
+    }
+
+.boshu{
+    border: 3px solid #64c3e8;
+    border-radius: 8px;
+    margin: 10px;
+    padding: 20px;
+}
+
 
 .button-container{
     display: flex;
@@ -35,10 +58,11 @@
 }
 
 .recruitment{
-    border: 1px solid #040303;
+    border: 3px solid  #64c3e8;
     border-radius: 8px;
     margin: 10px;
     padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 .recruitment.joined{
@@ -71,6 +95,27 @@
 
 
 /* ボタン */
+.button-submit,
+.button-reset {
+    min-width: 110px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.button-submit {
+  background-color: #fd9e0678;
+  color: black;
+  border: 2px solid #fd9f06a4;
+}
+
+.button-reset {
+  background-color: #f4f0f0;
+  color: black;
+  border: 2px solid #e7e1e1;
+}
+
+
 .button-talk,
 .button-close,
 .button-go {
@@ -81,18 +126,18 @@
 }
 
 .button-talk{
-    background-color: #b8ffba;
-    border: 2px solid #215d24;
+    background-color: #fd9e0678;
+    border: 2px solid #fd9f06a4;
 }
 
 .button-close{
-    background-color: #ffb8b8;
-    border: 2px solid #9c0707;
+    background-color: #f94747a3;
+    border: 2px solid #c80606;
 }
 
 .button-go{
-    background-color: #05c2fbc0;
-    border: 2px solid #0682f7;
+    background-color: #fd9f06a4;
+    border: 2px solid #fd9f06a4;
 }
 
 @media (max-width: 768px) {
