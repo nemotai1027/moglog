@@ -69,9 +69,7 @@
 
       <div class="button-container">
         <button type="button" onclick="go(this)" class="button-go">行く</button>
-        <form action="talk_demo1.html" method="get">
-          <button type="submit" class="button-talk"> 話す </button>
-        </form>
+        <button type="button" onclick="talk(this)" class="button-talk">話す</button>
         <button type="button" onclick="closeRecruitment(this)" class = "button-close">締切</button>
         <p class="status"></p>
       </div>
@@ -167,7 +165,7 @@
         article.appendChild(name);
 
         const details = document.createElement('ul');
-        [post.time, post.shop, post.message].forEach(function (value) {
+        [post.time, post.shop,post.participants, post.message].forEach(function (value) {
           const item = document.createElement('li');
           item.textContent = value;
           details.appendChild(item);
@@ -228,10 +226,11 @@
           name: document.getElementById('name').value.trim(),
           time: document.getElementById('time').value.trim(),
           shop: document.getElementById('shop').value.trim(),
+          participants: document.getElementById('participants').value.trim(),
           message: document.getElementById('message').value.trim()
         };
 
-        if (!post.name || !post.time || !post.shop || !post.message) {
+        if (!post.name || !post.time || !post.shop || !post.participants || !post.message) {
           return;
         }
 
@@ -259,8 +258,25 @@
       }
 
       function talk(button) {
-        updateStatus(button, '話します');
-      }
+       const recruitment = button.closest('.recruitment');
+
+       const name = recruitment.querySelector('p').textContent;
+       const items = recruitment.querySelectorAll('li');
+
+       const time = items[0].textContent;
+       const shop = items[1].textContent;
+       const participants = items[2].textContent;
+       const message = items[3].textContent;
+
+       const url = 'talk_demo1.html'
+        + '?name=' + encodeURIComponent(name)
+        + '&time=' + encodeURIComponent(time)
+        + '&shop=' + encodeURIComponent(shop)
+        + '&participants=' + encodeURIComponent(participants)
+        + '&message=' + encodeURIComponent(message);
+
+       window.location.href = url;
+    }
 
       function closeRecruitment(button) {
         const recruitment = button.closest('.recruitment');
