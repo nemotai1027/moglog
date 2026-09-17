@@ -265,7 +265,7 @@
     width: 100%;
     box-sizing: border-box;
     padding: 16px;
-    margin-bottom: 15px;
+    margin-bottom: 0 0 15px 0;
   }
 
   .recruitment > p {
