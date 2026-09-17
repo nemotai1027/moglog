@@ -15,7 +15,8 @@ service cloud.firestore {
 	match /databases/{database}/documents {
 		match /recruitments/{recruitmentId} {
 			allow read, create: if true;
-			allow update, delete: if false;
+			allow update: if true;
+			allow delete: if false;
 		}
 	}
 }

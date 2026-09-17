@@ -49,6 +49,24 @@
     background-color: #d3d3d3;
 }
 
+.participant-count{
+    margin: 0 0 10px auto;
+    text-align: right;
+}
+
+.participant-names{
+    margin: 0 0 10px;
+}
+
+.participant-name{
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
 .boshu label{
     display: block;
     margin-bottom: 5px;
