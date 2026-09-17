@@ -80,7 +80,6 @@
 
 .participant-count{
     margin: 0 0 10px auto;
-    text-align: right;
 }
 
 .participant-names{
@@ -191,11 +190,8 @@
     content: "📍";
 }
 
-.recruitment-info li:nth-child(3)::before{
-    content: "👥";
-}
 
-.recruitment-info li:nth-child(4)::before{
+.recruitment-info li:nth-child(3)::before{
     content: "💬";
 }
 
