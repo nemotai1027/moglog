@@ -95,6 +95,15 @@
     border: 2px solid #0682f7;
 }
 
+@media (max-width: 768px) {
+    article:first-of-type form .button-talk {
+        color: #0f4bbf;
+        -webkit-text-fill-color: #0f4bbf;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+
 /* 募集内容 */
 .recruitment-info{
     list-style-type: none;
