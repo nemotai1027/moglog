@@ -176,26 +176,93 @@
     content: "💬";
 }
 
+
+/* スマホ用 */
+/* スマホ用 */
 @media (max-width: 600px) {
-    body {
-        font-size: 18px;
-    }
 
-    .header h1 {
-        font-size: 40px;
-    }
-}
+  body {
+    font-size: 16px;
+    margin: 0;
+    padding: 0 15px;
+  }
 
-@media (max-width: 600px) {
-    .recruitment {
-        font-size: 18px;
-    }
+  /* ロゴ */
+  .header h1 {
+    font-size: 40px;
+    text-align: center;
+    margin: 20px 0;
+  }
 
-    .recruitment-info {
-        font-size: 16px;
-    }
+  .header .mog,
+  .header .log {
+    font-size: 40px;
+  }
 
-    button {
-        font-size: 16px;
-    }
+  /* 募集フォーム */
+  .boshu {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .boshu h2 {
+    font-size: 24px;
+  }
+
+  .boshu label {
+    display: block;
+    font-size: 17px;
+    margin-top: 15px;
+  }
+
+  .boshu input,
+  .boshu textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .boshu textarea {
+    min-height: 120px;
+  }
+
+  /* ボタン */
+  .button-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    font-size: 16px;
+    padding: 10px 16px;
+  }
+
+  /* 募集カード */
+  .recruitment {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    margin-bottom: 15px;
+  }
+
+  .recruitment > p {
+    font-size: 20px;
+    margin: 0 0 10px;
+  }
+
+  .recruitment-info {
+    font-size: 16px;
+    padding-left: 25px;
+  }
+
+  .recruitment-info li {
+    margin-bottom: 6px;
+  }
+
+  /* ステータス */
+  .status {
+    font-size: 15px;
+  }
 }
