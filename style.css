@@ -71,3 +71,25 @@
     border-radius: 8px;
     border: 2px solid #0682f7;
 }
+
+/* 募集内容 */
+.recuruitment-info{
+    list-style-type: none;
+    padding: 0;
+}
+
+.recruitment-info li{
+    margin-bottom: 5px;
+}
+
+.recruitment-info li:first-child(1)::before{
+    content: "⏰";
+}
+
+.recruitment-info li:nth-child(2)::before{
+    content: "📍";
+}
+
+.recruitment-info li:nth-child(3)::before{
+    content: "💬";
+}
