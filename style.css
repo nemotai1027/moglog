@@ -123,6 +123,7 @@
     padding: 10px 20px;
     border-radius: 8px;
     flex-shrink: 0;
+    color: black;
 }
 
 .button-talk{
@@ -173,4 +174,28 @@
 
 .recruitment-info li:nth-child(4)::before{
     content: "💬";
+}
+
+@media (max-width: 600px) {
+    body {
+        font-size: 18px;
+    }
+
+    .header h1 {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    .recruitment {
+        font-size: 18px;
+    }
+
+    .recruitment-info {
+        font-size: 16px;
+    }
+
+    button {
+        font-size: 16px;
+    }
 }
