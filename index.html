@@ -64,7 +64,6 @@
       <ul class="recruitment-info">
         <li>20時</li>
         <li>デニーズ</li>
-        <li>2人</li>
         <li>デニーズのパフェ食べましょー</li>
       </ul>
 
@@ -81,7 +80,6 @@
       <ul class="recruitment-info">
         <li>21時</li>
         <li>天久保ココス</li>
-        <li>4人</li>
         <li>ハンバーグ食べたい</li>
       </ul>
      
@@ -98,7 +96,6 @@
       <ul class="recruitment-info">
         <li>19時</li>
         <li>春4ファミマ</li>
-        <li>1人</li>
         <li>ひとりさみしい</li>
       </ul>
       
@@ -115,7 +112,6 @@
       <ul class="recruitment-info">
         <li>18時</li>
         <li>zeyo</li>
-        <li>1人</li>
         <li>カレーうどん食べよ</li>
       </ul>
       <div class="button-container">
@@ -131,7 +127,6 @@
       <ul class="recruitment-info">
         <li>20時</li>
         <li>あじさい</li>
-        <li>3人</li>
         <li>飲もう！</li>
       </ul>
 
@@ -170,8 +165,9 @@
         details.className = 'recruitment-info';
         const participantsMax = Number(post.participants_max ?? post.guest ?? 0);
         const participants = Number(post.participants ?? 1);
+        const participantsMaxLabel = participantsMax === 1000 ? '∞' : participantsMax;
   
-        [post.time, post.shop,post.participants, post.message].forEach(function (value) {
+        [post.time, post.shop, post.message].forEach(function (value) {
           const item = document.createElement('li');
           item.textContent = value;
           details.appendChild(item);
@@ -180,15 +176,15 @@
 
         const participantCount = document.createElement('p');
         participantCount.className = 'participant-count';
-        participantCount.textContent = `参加人数: ${participants} / ${participantsMax}`;
+        participantCount.textContent = `参加人数: ${participants} / ${participantsMaxLabel}`;
         article.appendChild(participantCount);
 
         const participantNames = document.createElement('p');
         participantNames.className = 'participant-names';
-        const names = Array.isArray(post.participantNames) ? post.participantNames : [];
-        participantNames.textContent = names.length > 0
-          ? `参加者: ${names.join('、')}`
-          : '参加者: まだいません';
+        const names = Array.isArray(post.participantNames) && post.participantNames.length > 0
+          ? post.participantNames
+          : [post.name];
+        participantNames.textContent = `参加者: ${names.join('、')}`;
         article.appendChild(participantNames);
 
         const participantName = document.createElement('input');
@@ -279,11 +275,12 @@
           time: document.getElementById('time').value.trim(),
           shop: document.getElementById('shop').value.trim(),
           message: document.getElementById('message').value.trim(),
-          participants_max: Number(document.getElementById('participants').value.trim()),
-          participants: 1
+          participants_max: Number(document.getElementById('participants').value.trim()) || 1000,
+          participants: 1,
+          participantNames: [document.getElementById('name').value.trim()]
         };
 
-        if (!post.name || !post.time || !post.shop || !post.message || !Number.isInteger(post.participants_max) || post.participants_max < 1) {
+        if (!post.name || !Number.isInteger(post.participants_max) || post.participants_max < 1) {
           return;
         }
 
